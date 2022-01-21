@@ -24,9 +24,9 @@ contract NFT_Worlds_Server_Router is AccessControl {
   event WorldRoutingDataRemoved(uint256 worldTokenId);
 
   IERC721 immutable NFTW_ERC721;
-  string private convenienceGateway;
   EnumerableSet.UintSet private routedWorldsSet;
-  mapping(uint => string) private worldRoutingIPFSHash;
+  mapping(uint => string) public routedWorldIPFSHash;
+  string public convenienceGateway;
   bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
   bytes32 private constant RENTAL_MANAGER_ROLE = keccak256("RENTAL_MANAGER_ROLE");
 
@@ -41,13 +41,13 @@ contract NFT_Worlds_Server_Router is AccessControl {
   }
 
   function getRoutingDataURI(uint _worldTokenId, bool includeGateway) public view returns (string memory) {
-    require(bytes(worldRoutingIPFSHash[_worldTokenId]).length > 0, "No routing data");
+    require(routedWorldsSet.contains(_worldTokenId), "No routing data");
 
     if (includeGateway) {
-      return string(abi.encodePacked(convenienceGateway, worldRoutingIPFSHash[_worldTokenId]));
+      return string(abi.encodePacked(convenienceGateway, routedWorldIPFSHash[_worldTokenId]));
     }
 
-    return string(abi.encodePacked("ipfs://", worldRoutingIPFSHash[_worldTokenId]));
+    return string(abi.encodePacked("ipfs://", routedWorldIPFSHash[_worldTokenId]));
   }
 
   function getAllRoutingDataURIs(bool includeGateway) external view returns (string[] memory) {
@@ -62,17 +62,17 @@ contract NFT_Worlds_Server_Router is AccessControl {
   }
 
   function setRoutingDataIPFSHash(uint _worldTokenId, string calldata _ipfsHash) onlyWorldController(_worldTokenId) external {
-    require(bytes(_ipfsHash).length == 40, "Invalid IPFS hash");
+    require(bytes(_ipfsHash).length == 46, "Invalid IPFS hash");
 
     routedWorldsSet.add(_worldTokenId);
-    worldRoutingIPFSHash[_worldTokenId] = _ipfsHash;
+    routedWorldIPFSHash[_worldTokenId] = _ipfsHash;
 
     emit WorldRoutingDataUpdated(_worldTokenId);
   }
 
   function removeRoutingDataIPFSHash(uint _worldTokenId) onlyWorldController(_worldTokenId) external {
-    worldRoutingIPFSHash[_worldTokenId] = "";
     routedWorldsSet.remove(_worldTokenId);
+    routedWorldIPFSHash[_worldTokenId] = "";
 
     emit WorldRoutingDataRemoved(_worldTokenId);
   }
