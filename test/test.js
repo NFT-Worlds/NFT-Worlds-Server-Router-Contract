@@ -119,19 +119,35 @@ describe('NFT Worlds Server Router', () => {
   });
 
   it('Fails when retrieving routing data uri for unset world', async () => {
+    await contract.deployed();
 
+    await expect(contract.getRoutingDataURI(5, false)).to.be.reverted;
   });
 
   it('Fails when setting ipfs hash with invalid hash length', async () => {
+    await contract.deployed();
 
+    await expect(contract.connect(mockTokenOwner).setRoutingDataIPFSHash(123, '123')).to.be.reverted;
   });
 
   it('Fails when setting ipfs hash and sender is not world controller', async () => {
+    await contract.deployed();
 
+    const tokenId = 123;
+    const ipfsHash = generateRandomIPFSHash();
+
+    await expect(contract.connect(otherAddresses[0]).setRoutingDataIPFSHash(tokenId, ipfsHash)).to.be.reverted;
   });
 
   it('Fails when removing ipfs hash and sender is not world controller', async () => {
+    await contract.deployed();
 
+    const tokenId = 345;
+    const ipfsHash = generateRandomIPFSHash();
+
+    await contract.connect(rentalManager).setRoutingDataIPFSHash(tokenId, ipfsHash);
+
+    await expect(contract.removeRoutingDataIPFSHash(tokenId)).to.be.reverted;
   });
 });
 
