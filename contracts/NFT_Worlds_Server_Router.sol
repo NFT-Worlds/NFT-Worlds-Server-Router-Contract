@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.2;
 
 /**
  * The NFT Worlds Server Router contract provides
@@ -11,6 +11,7 @@ pragma solidity ^0.8.0;
  * NFT World server connection details and other
  * relevant world information to be set, queried
  * and distributed.
+ *
  */
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -77,7 +78,7 @@ contract NFT_Worlds_Server_Router is AccessControl {
     emit WorldRoutingDataRemoved(_worldTokenId);
   }
 
-  function updateConvenienceGateway(string calldata _convenienceGateway) external onlyRole(OWNER_ROLE) {
+  function setConvenienceGateway(string calldata _convenienceGateway) external onlyRole(OWNER_ROLE) {
     convenienceGateway = _convenienceGateway;
   }
 
