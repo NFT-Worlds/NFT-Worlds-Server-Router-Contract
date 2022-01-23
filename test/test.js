@@ -11,6 +11,7 @@ describe('NFT Worlds Server Router', () => {
   let otherAddresses;
 
   beforeEach(async () => {
+    const { utils } = ethers;
     const [ _owner, _rentalManager, _mockTokenOwner, ..._otherAddresses ] = await ethers.getSigners();
     const TESTMockNFTWorldsTokenFactory = await ethers.getContractFactory('TEST_Mock_NFT_Worlds_Token');
     const NFTWorldsServerRouterFactory = await ethers.getContractFactory('NFT_Worlds_Server_Router');
@@ -24,9 +25,10 @@ describe('NFT Worlds Server Router', () => {
 
     contract = await NFTWorldsServerRouterFactory.deploy(
       mockTokenContract.address,
-      rentalManager.address,
       IPFS_GATEWAY,
     );
+
+    await contract.grantRole(utils.keccak256(utils.toUtf8Bytes('RENTAL_MANAGER_ROLE')), rentalManager.address);
   });
 
   it('Should deploy', async () => {

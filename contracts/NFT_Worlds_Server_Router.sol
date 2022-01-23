@@ -31,12 +31,10 @@ contract NFT_Worlds_Server_Router is AccessControl {
   bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
   bytes32 private constant RENTAL_MANAGER_ROLE = keccak256("RENTAL_MANAGER_ROLE");
 
-  constructor(address _nftWorldsErc721, address _worldRentalManager, string memory _convenienceGateway) {
+  constructor(address _nftWorldsErc721, string memory _convenienceGateway) {
     require(_nftWorldsErc721 != address(0), "Addr 0");
-    require(_worldRentalManager != address(0), "Addr 0");
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setupRole(OWNER_ROLE, msg.sender);
-    _setupRole(RENTAL_MANAGER_ROLE, _worldRentalManager);
     convenienceGateway = _convenienceGateway;
     NFTW_ERC721 = IERC721(_nftWorldsErc721);
   }
