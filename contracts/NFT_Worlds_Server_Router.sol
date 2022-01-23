@@ -21,7 +21,7 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 contract NFT_Worlds_Server_Router is AccessControl {
   using EnumerableSet for EnumerableSet.UintSet;
 
-  event WorldRoutingDataUpdated(uint256 worldTokenId, string ipfsHash);
+  event WorldRoutingDataSet(uint256 worldTokenId, string ipfsHash);
   event WorldRoutingDataRemoved(uint256 worldTokenId);
 
   IERC721 immutable NFTW_ERC721;
@@ -71,7 +71,7 @@ contract NFT_Worlds_Server_Router is AccessControl {
     routedWorldsSet.add(_worldTokenId);
     routedWorldIPFSHash[_worldTokenId] = _ipfsHash;
 
-    emit WorldRoutingDataUpdated(_worldTokenId, _ipfsHash);
+    emit WorldRoutingDataSet(_worldTokenId, _ipfsHash);
   }
 
   function removeRoutingDataIPFSHash(uint _worldTokenId) onlyWorldController(_worldTokenId) external {
