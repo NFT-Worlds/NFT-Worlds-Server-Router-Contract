@@ -51,7 +51,7 @@ contract NFT_Worlds_Server_Router is AccessControl {
     return string(abi.encodePacked("ipfs://", routedWorldIPFSHash[_worldTokenId]));
   }
 
-  function getAllRoutingDataURIs(bool includeGateway) external view returns (uint[] memory, string[] memory) {
+  function getAllRoutings(bool includeGateway) external view returns (uint[] memory, string[] memory) {
     uint totalRoutedWorlds = routedWorldsSet.length();
     uint[] memory routingWorldIds = new uint[](totalRoutedWorlds);
     string[] memory routingDataURIs = new string[](totalRoutedWorlds);

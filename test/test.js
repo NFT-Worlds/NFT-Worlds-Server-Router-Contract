@@ -74,11 +74,11 @@ describe('NFT Worlds Server Router', () => {
       await contract.connect(mockTokenOwner).setRoutingDataIPFSHash(update[0], update[1]);
     }
 
-    const [ ipfsWorldIds, ipfsHashes ] = await contract.getAllRoutingDataURIs(false);
-    const [ gatewayWorldIds, gatewayHashes ] = await contract.getAllRoutingDataURIs(true);
+    const [ ipfsWorldIds, ipfsHashes ] = await contract.getAllRoutings(false);
+    const [ gatewayWorldIds, gatewayHashes ] = await contract.getAllRoutings(true);
 
     expect(ipfsHashes.length).to.equal(gatewayHashes.length);
-console.log(updates);
+
     for (let i = 0; i < ipfsHashes.length; i++) {
       const ipfsWorldId = ipfsWorldIds[i] * 1;
       const ipfsHash = ipfsHashes[i];
